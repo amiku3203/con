@@ -1,0 +1,603 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Career Guidance</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f9f9f9;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        /* Loader */
+        #loader {
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.8);
+            z-index: 9999;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            display: none;
+        }
+
+        .spinner {
+            border: 8px solid #f3f3f3;
+            border-top: 8px solid #007bff;
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            animation: spin 1.5s linear infinite;
+        }
+
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+
+        /* Header */
+        header {
+            background-color: #007bff;
+            color: white;
+            padding: 20px;
+            text-align: center;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 2rem;
+        }
+
+        /* Main Container */
+        .container {
+            max-width: 900px;
+            margin: 20px auto;
+            padding: 20px;
+            background: #fff;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        form label {
+            display: block;
+            margin-top: 10px;
+            font-weight: bold;
+        }
+
+        form input,
+        form select,
+        form button {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            transition: 0.3s ease;
+        }
+
+        form input:focus,
+        form select:focus {
+            border-color: #007bff;
+            outline: none;
+            box-shadow: 0 0 8px rgba(0, 123, 255, 0.5);
+        }
+
+        form button {
+            background-color: #007bff;
+            color: white;
+            cursor: pointer;
+            font-size: 1rem;
+        }
+
+        form button:hover {
+            background-color: #0056b3;
+        }
+
+        ul {
+            list-style-type: none;
+            padding-left: 0;
+        }
+
+        ul li {
+            margin-bottom: 10px;
+        }
+
+        .page {
+            display: none;
+        }
+
+        .page.active {
+            display: block;
+        }
+
+        a {
+            display: block;
+            text-align: center;
+            padding: 10px;
+            background-color: #28a745;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            margin-top: 20px;
+        }
+
+        a:hover {
+            background-color: #218838;
+        }
+
+        #collegeList {
+            list-style-type: none;
+            padding-left: 0;
+            margin-top: 20px;
+        }
+
+        #collegeList li {
+            margin-bottom: 20px;
+            padding: 10px;
+            background-color: #f0f0f0;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        #feeScholarshipDetails {
+            display: none;
+            margin-top: 20px;
+            padding: 20px;
+            background-color: #f9f9f9;
+            border-radius: 10px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        #backToColleges {
+            display: block;
+            text-align: center;
+            margin-top: 20px;
+            background-color: #007bff;
+            color: white;
+            padding: 10px;
+            border-radius: 5px;
+            text-decoration: none;
+        }
+        /* Responsiveness */
+        @media (max-width: 768px) {
+            .container {
+                padding: 15px;
+            }
+
+            header h1 {
+                font-size: 1.5rem;
+            }
+        }
+        .question {
+            margin-bottom: 20px;
+        }
+
+        .question p {
+            font-size: 1.2em;
+            margin-bottom: 10px;
+        }
+
+        /* Segmented Control Styling */
+        .segmented-control {
+            display: inline-flex;
+            border: 2px solid #007BFF;
+            border-radius: 20px;
+            overflow: hidden;
+            width: 100%;
+        }
+
+        .segmented-control input[type="radio"] {
+            display: none;
+        }
+
+        .segmented-control label {
+            flex: 1;
+            text-align: center;
+            padding: 10px 0;
+            cursor: pointer;
+            border-right: 2px solid #007BFF;
+            color: #007BFF;
+            font-size: 1em;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        .segmented-control label:last-child {
+            border-right: none;
+        }
+
+        .segmented-control input[type="radio"]:checked + label {
+            background-color: #007BFF;
+            color: white;
+        }
+
+        /* Button Styles */@media (max-width: 600px) {
+            .segmented-control {
+                flex-direction: column;
+                border-radius: 10px;
+            }
+
+            .segmented-control label {
+                border-right: none;
+                border-bottom: 2px solid #007BFF;
+            }
+
+            .segmented-control label:last-child {
+                border-bottom: none;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Loader -->
+    <div id="loader">
+        <div class="spinner"></div>
+    </div>
+
+    <!-- Header -->
+    <header>
+        <h1><i class="fas fa-graduation-cap"></i> Career Guidance</h1>
+    </header>
+
+    <section id="collegeRecommendations" class="page">
+        <div class="container">
+            <h1>Recommended Colleges</h1>
+            <ul id="collegeList"></ul>
+        </div>
+    </section>
+
+    <!-- Fee and Scholarship Details Section -->
+    <section id="feeScholarshipDetails" class="page">
+        <div class="container">
+            <h1>College Fee & Scholarship Details</h1>
+            <p><strong>College:</strong> <span id="collegeName"></span></p>
+            <p id="feeDetails"></p>
+            <p id="scholarshipDetails"></p>
+            <a href="#" id="backToColleges">Back to College List</a>
+        </div>
+    </section>
+    <!-- First Webpage: Introduction and Basic Details Form -->
+    <section id="intro" class="page active">
+        <div class="container">
+            <h1>Welcome to Career Guidance</h1>
+            <p>Find the right path for your future with personalized recommendations and guidance.</p>
+            <form id="basicDetailsForm">
+                <label for="name"><i class="fas fa-user"></i> Name:</label>
+                <input type="text" id="name" name="name" required>
+
+                <label for="age"><i class="fas fa-birthday-cake"></i> Age:</label>
+                <input type="number" id="age" name="age" required>
+
+                <label for="sex"><i class="fas fa-venus-mars"></i> Sex:</label>
+                <select id="sex" name="sex" required>
+                    <option value="male">Male</option>
+                    <option value="female">Female</option>
+                    <option value="other">Other</option>
+                </select>
+
+                <label for="qualification"><i class="fas fa-graduation-cap"></i> Highest Qualification:</label>
+                <input type="text" id="qualification" name="qualification" required>
+
+                <button type="submit"><i class="fas fa-arrow-right"></i> Next</button>
+            </form>
+        </div>
+    </section>
+
+    <!-- Second Webpage: AI-Generated Survey -->
+    <section id="survey" class="page">
+        <div class="container">
+            <h1>Career Interest Survey</h1>
+            <form id="surveyForm">
+                <!-- First Question -->
+                <div class="question">
+                    <p>Which activities do you enjoy most during your free time?</p>
+                    <div style="display: flex; border: 2px solid #007BFF; border-radius: 30px; overflow: hidden;">
+                        <input type="radio" id="reading" name="activity" value="Reading" required style="display:none;">
+                        <label for="reading" style="flex:1; padding:10px; text-align:center; cursor:pointer; border-right:2px solid #007BFF; color:#007BFF;">Reading</label>
+                        
+                        <input type="radio" id="socializing" name="activity" value="Socializing" required style="display:none;">
+                        <label for="socializing" style="flex:1; padding:10px; text-align:center; cursor:pointer; border-right:2px solid #007BFF; color:#007BFF;">Socializing</label>
+                        
+                        <input type="radio" id="art" name="activity" value="Creating art" required style="display:none;">
+                        <label for="art" style="flex:1; padding:10px; text-align:center; cursor:pointer; border-right:2px solid #007BFF; color:#007BFF;">Creating art</label>
+                        
+                        <input type="radio" id="puzzles" name="activity" value="Solving puzzles" required style="display:none;">
+                        <label for="puzzles" style="flex:1; padding:10px; text-align:center; cursor:pointer; border-right:2px solid #007BFF; color:#007BFF;">Solving puzzles</label>
+                        
+                        <input type="radio" id="sports" name="activity" value="Playing sports" required style="display:none;">
+                        <label for="sports" style="flex:1; padding:10px; text-align:center; cursor:pointer; color:#007BFF;">Playing sports</label>
+                    </div>
+                </div>
+    
+                <!-- Second Question -->
+                <div class="question">
+                    <p>Do you prefer working alone or in a team?</p>
+                    <div style="display: flex; border: 2px solid #007BFF; border-radius: 30px; overflow: hidden;">
+                        <input type="radio" id="alone" name="work_environment" value="alone" required style="display:none;">
+                        <label for="alone" style="flex:1; padding:10px; text-align:center; cursor:pointer; border-right:2px solid #007BFF; color:#007BFF;">Alone</label>
+                        
+                        <input type="radio" id="team" name="work_environment" value="team" required style="display:none;">
+                        <label for="team" style="flex:1; padding:10px; text-align:center; cursor:pointer; border-right:2px solid #007BFF; color:#007BFF;">In a team</label>
+                        
+                        <input type="radio" id="mix" name="work_environment" value="mix" required style="display:none;">
+                        <label for="mix" style="flex:1; padding:10px; text-align:center; cursor:pointer; color:#007BFF;">A mix of both</label>
+                    </div>
+                </div>
+    
+                <!-- Third Question -->
+                <div class="question">
+                    <p>How do you approach problem solving?</p>
+                    <div style="display: flex; border: 2px solid #007BFF; border-radius: 30px; overflow: hidden;">
+                        <input type="radio" id="logically" name="approach" value="logically" required style="display:none;">
+                        <label for="logically" style="flex:1; padding:10px; text-align:center; cursor:pointer; border-right:2px solid #007BFF; color:#007BFF;">Logically</label>
+                        
+                        <input type="radio" id="creatively" name="approach" value="creatively" required style="display:none;">
+                        <label for="creatively" style="flex:1; padding:10px; text-align:center; cursor:pointer; border-right:2px solid #007BFF; color:#007BFF;">Creatively</label>
+                        
+                        <input type="radio" id="practically" name="approach" value="practically" required style="display:none;">
+                        <label for="practically" style="flex:1; padding:10px; text-align:center; cursor:pointer; border-right:2px solid #007BFF; color:#007BFF;">Practically</label>
+                        
+                        <input type="radio" id="collaboratively" name="approach" value="collaboratively" required style="display:none;">
+                        <label for="collaboratively" style="flex:1; padding:10px; text-align:center; cursor:pointer; color:#007BFF;">Collaboratively</label>
+                    </div>
+                </div>
+    
+                <!-- Fourth Question -->
+                <div class="question">
+                    <p>What subjects or activities come naturally to you?</p>
+                    <div style="display: flex; border: 2px solid #007BFF; border-radius: 30px; overflow: hidden;">
+                        <input type="radio" id="maths" name="subjects" value="Maths and science" required style="display:none;">
+                        <label for="maths" style="flex:1; padding:10px; text-align:center; cursor:pointer; border-right:2px solid #007BFF; color:#007BFF;">Maths and science</label>
+                        
+                        <input type="radio" id="writing" name="subjects" value="Writing and Language" required style="display:none;">
+                        <label for="writing" style="flex:1; padding:10px; text-align:center; cursor:pointer; border-right:2px solid #007BFF; color:#007BFF;">Writing and Language</label>
+                        
+                        <input type="radio" id="physical" name="subjects" value="Physical activities and Sports" required style="display:none;">
+                        <label for="physical" style="flex:1; padding:10px; text-align:center; cursor:pointer; border-right:2px solid #007BFF; color:#007BFF;">Physical activities and Sports</label>
+                        
+                        <input type="radio" id="technical" name="subjects" value="Technical and Mechanical Tasks" required style="display:none;">
+                        <label for="technical" style="flex:1; padding:10px; text-align:center; cursor:pointer; color:#007BFF;">Technical and Mechanical Tasks</label>
+                    </div>
+                </div>
+    
+                <!-- Submit Button -->
+                <button type="submit" style="display: block; width: 100%; padding: 12px 0; font-size: 1.2em; background-color: #007BFF; color: white; border: none; border-radius: 5px; cursor: pointer; transition: background-color 0.3s ease;">
+                    <i class="fas fa-paper-plane"></i> Submit
+                </button>
+            </form>
+        </div>
+    </section>
+    
+   
+    
+    
+    
+
+    <!-- Third Webpage: Course Recommendation and Roadmap -->
+    <section id="course" class="page">
+        <div class="container">
+            <h1>Recommended Courses</h1>
+            <p>Based on your survey, we recommend the following career options and courses:</p>
+            <div id="recommendedCourses"></div>
+            <form id="courseSelectionForm">
+                <button type="submit" style="display: block; margin: 20px auto; padding: 12px 20px; font-size: 1.2em; background-color: #007BFF; color: white; border: none; border-radius: 5px; cursor: pointer; transition: background-color 0.3s ease;">
+                    <i class="fas fa-arrow-right"></i> Choose Selected Course
+                </button>
+            </form>
+        </div>
+    </section>
+    
+    
+    
+
+    <!-- Fourth Webpage: College Preferences -->
+    <section id="college" class="page">
+        <div class="container">
+            <h1>College Preferences</h1>
+            <form id="collegeForm">
+                <label for="location"><i class="fas fa-map-marker-alt"></i> Preferred Location:</label>
+                <input type="text" id="location" name="location" required>
+
+               
+
+                <label for="mode">Mode of Education:</label>
+                <select id="mode" name="mode" required>
+                    <option value="physical">Physical Classes</option>
+                    <option value="distance">Distance Learning</option>
+                </select>
+
+
+                <button type="submit"><i class="fas fa-arrow-right"></i> Proceed</button>
+            </form>
+        </div>
+    </section>
+
+    <!-- Final Webpage: Completion -->
+    <section id="complete" class="page">
+        <div class="container">
+            <h1>Career Path Completed!</h1>
+            <p>We have sent your career roadmap to your email address. Best of luck!</p>
+            <a href="#"><i class="fas fa-home"></i> Go to Homepage</a>
+        </div>
+    </section>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            // Event listener for basic details form submission
+            document.getElementById('basicDetailsForm').addEventListener('submit', function(event) {
+                event.preventDefault();
+                showLoader();
+                setTimeout(function () {
+                    hideLoader();
+                    showPage('survey');
+                }, 1000);
+            });
+    
+            // Event listener for survey form submission
+            document.getElementById('surveyForm').addEventListener('submit', function(event) {
+                event.preventDefault();
+                showLoader();
+                setTimeout(function () {
+                    hideLoader();
+                    showPage('course');
+                    displayCourses();
+                }, 1000);
+            });
+    
+            // Event listener for course selection form submission
+            document.getElementById('courseSelectionForm').addEventListener('submit', function(event) {
+                event.preventDefault();
+                showLoader();
+                setTimeout(function () {
+                    hideLoader();
+                    showPage('college');
+                }, 1000);
+            });
+    
+            // Event listener for college form submission
+            document.getElementById('collegeForm').addEventListener('submit', function(event) {
+                event.preventDefault();
+                showLoader();
+                setTimeout(function () {
+                    hideLoader();
+                    showPage('collegeRecommendations');
+                    displayColleges();
+                }, 1000);
+            });
+    
+            // Functions to display loader and hide it
+            function showLoader() {
+                document.getElementById('loader').style.display = 'flex';
+            }
+    
+            function hideLoader() {
+                document.getElementById('loader').style.display = 'none';
+            }
+    
+            // Function to show a specific page by its ID
+            function showPage(pageId) {
+                const pages = document.querySelectorAll('.page');
+                pages.forEach(page => page.classList.remove('active'));
+                document.getElementById(pageId).classList.add('active');
+            }
+    
+            // Function to display recommended courses
+            function displayCourses() {
+        const courses = [
+            {
+                name: "Computer Science and Engineering",
+                roadmap: "Subjects include programming, data structures, algorithms, and computer networks.",
+                challenges: "Challenging coding assignments and tough projects."
+            },
+            {
+                name: "Digital Marketing",
+                roadmap: "Subjects include SEO, content marketing, and social media strategies.",
+                challenges: "Keeping up with ever-changing digital trends."
+            },
+            {
+                name: "Graphic Design",
+                roadmap: "Subjects include typography, color theory, and digital illustration.",
+                challenges: "High competition and pressure to maintain creativity."
+            }
+        ];
+    
+        const courseList = document.getElementById('recommendedCourses');
+        courseList.innerHTML = ''; // Clear previous content
+        
+        courses.forEach(course => {
+            const div = document.createElement('div');
+            div.innerHTML = `
+                <div style="border: 1px solid #ddd; padding: 20px; margin: 15px 0; border-radius: 10px; box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); background-color: #f9f9f9;">
+                    <h2 style="color: #007BFF; font-size: 1.5em;">${course.name}</h2>
+                    <p><strong>Roadmap:</strong> ${course.roadmap}</p>
+                    <p><strong>Challenges:</strong> ${course.challenges}</p>
+                </div>`;
+            courseList.appendChild(div);
+        });
+    }
+    
+            // Function to display recommended colleges
+            function displayColleges() {
+                const colleges = [
+                    { name: 'IIT Delhi', location: 'Delhi', fee: 'Rs. 2,00,000/year', scholarship: 'Merit-based Scholarship available' },
+                    { name: 'BITS Pilani', location: 'Rajasthan', fee: 'Rs. 3,00,000/year', scholarship: 'Scholarship based on financial need' },
+                    { name: 'NIT Trichy', location: 'Tamil Nadu', fee: 'Rs. 1,50,000/year', scholarship: 'Partial fee waiver for top 10% students' }
+                ];
+    
+                const collegeList = document.getElementById('collegeList');
+                collegeList.innerHTML = ''; // Clear previous content
+                colleges.forEach(college => {
+                    const li = document.createElement('li');
+                    li.innerHTML = `<strong>College:</strong> ${college.name} <br>
+                                    <strong>Location:</strong> ${college.location} <br>
+                                    <strong>Fee:</strong> ${college.fee} <br>
+                                    <strong>Scholarship:</strong> ${college.scholarship} <br>`;
+                    li.addEventListener('click', function() {
+                        document.getElementById('collegeRecommendations').style.display = 'none';
+                        document.getElementById('feeScholarshipDetails').style.display = 'block';
+                        document.getElementById('collegeName').textContent = college.name;
+                        document.getElementById('feeDetails').textContent = `Annual Fee: ${college.fee}`;
+                        document.getElementById('scholarshipDetails').textContent = college.scholarship;
+                    });
+                    collegeList.appendChild(li);
+                });
+            }
+    
+            // Event listener to go back to college recommendations
+            document.getElementById('backToColleges').addEventListener('click', function(event) {
+                event.preventDefault();
+                document.getElementById('feeScholarshipDetails').style.display = 'none';
+                document.getElementById('collegeRecommendations').style.display = 'block';
+            });
+        });
+    </script>
+     <script>
+        // Adding event listener to change the background of selected label
+        document.querySelectorAll('input[type="radio"]').forEach((radio) => {
+            radio.addEventListener('change', function() {
+                const questionGroup = this.name;
+                const labels = document.querySelectorAll(`input[name="${questionGroup}"] + label`);
+    
+                labels.forEach((label) => {
+                    label.style.backgroundColor = '';
+                    label.style.color = '#007BFF';
+                });
+    
+                const selectedLabel = document.querySelector(`label[for="${this.id}"]`);
+                selectedLabel.style.backgroundColor = '#007BFF';
+                selectedLabel.style.color = '#fff';
+            });
+        });
+    </script>
+</body>
+
+</html>
